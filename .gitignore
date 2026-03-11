@@ -1,0 +1,22 @@
+# Python
+nexus/.venv/
+nexus/**/__pycache__/
+nexus/**/*.pyc
+nexus/**/*.pyo
+nexus/**/*.egg-info/
+nexus/.pytest_cache/
+nexus/**/.mypy_cache/
+
+# Environment
+nexus/.env
+
+# Frontend
+nexus/frontend/node_modules/
+nexus/frontend/dist/
+
+# Docker volumes
+nexus/pgdata/
+
+# OS
+.DS_Store
+Thumbs.db
