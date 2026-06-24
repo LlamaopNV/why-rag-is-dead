@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Why R.A.G is Dead</title>
+  <meta name="description" content="Retrieval should not mean stuffing chunks into context. It should mean verified microagents fetching only what is true. A live demo of the NEXUS pipeline." />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main>
+    <section id="hero">
+      <p class="eyebrow">A manifesto, and a working demo</p>
+      <h1>Why R.A.G is Dead</h1>
+      <p class="lede">Retrieval was never supposed to mean stuffing a wall of chunks into a context window and praying. It should mean verified microagents fetching only what is true, and proving where every word came from.</p>
+      <div class="hero-cta">
+        <a class="btn-primary" href="#sim">Watch it work</a>
+        <a class="btn-ghost" href="https://github.com/LlamaopNV/why-rag-is-dead">Read the source</a>
+      </div>
+    </section>
+
+    <section id="problem">
+      <h2>RAG asks you to trust a black box</h2>
+      <p>Classic retrieval-augmented generation embeds your data, pulls the top-k nearest chunks, and dumps them into one giant prompt. Three things break:</p>
+      <ul class="problem-list">
+        <li><strong>Hallucinated relevance.</strong> Cosine similarity is not understanding. The "nearest" chunk is often the wrong one, and the model cannot tell.</li>
+        <li><strong>No provenance.</strong> The answer cites nothing you can check. You are trusting that the chunk said what the model claims it said.</li>
+        <li><strong>Context bloat.</strong> To be safe, RAG over-fetches. Tens of thousands of tokens of maybe-relevant text, every single call.</li>
+      </ul>
+    </section>
+
+    <section id="sim">
+      <h2>Watch a query get answered, and verified</h2>
+      <p class="sim-query">Query: <code>Where is binary search implemented and how does it handle an empty array?</code></p>
+      <button id="sim-run" class="btn-primary">Run query</button>
+      <div class="sim-stage" id="sim-planner" data-stage="planner"><h3>Planner</h3><div class="stage-body"></div></div>
+      <div class="sim-stage" id="sim-workers" data-stage="workers"><h3>Workers</h3><div class="stage-body"></div></div>
+      <div class="sim-stage" id="sim-manager" data-stage="manager"><h3>Manager (shell verification)</h3><div class="stage-body"></div></div>
+      <div class="sim-stage" id="sim-answer" data-stage="answer"><h3>Main LLM</h3><div class="stage-body"></div></div>
+      <aside id="sim-rag-lane"><h3>Meanwhile, RAG</h3><div class="stage-body"></div></aside>
+    </section>
+
+    <section id="receipt">
+      <h2>The token receipt</h2>
+      <p>Same question. Same codebase. Here is what each approach spends to answer it.</p>
+      <div class="bars">
+        <div class="bar-row"><span class="bar-label">Naive file dump</span><div class="bar" id="bar-naive"><span>~50K</span></div></div>
+        <div class="bar-row"><span class="bar-label">Claude Code (reads whole files)</span><div class="bar" id="bar-cc"><span>~53K</span></div></div>
+        <div class="bar-row"><span class="bar-label">NEXUS (verified facts only)</span><div class="bar" id="bar-nexus"><span>~13K</span></div></div>
+      </div>
+      <p class="receipt-note">95 to 99 percent less context, and every fact is checked.</p>
+    </section>
+
+    <section id="how">
+      <h2>How it actually works</h2>
+      <ol class="pipeline">
+        <li><strong>Planner</strong> (Claude, ~500 tokens, never sees the codebase) decomposes the query into 3 to 5 atomic shell tasks scoped to the right directories.</li>
+        <li><strong>Workers</strong> (local Ollama qwen2.5:1.5b, parallel, fresh context each) run sandboxed <code>grep</code>/<code>sed</code> and return structured citations.</li>
+        <li><strong>Manager</strong> verifies every citation with deterministic shell (<code>sed -n '{line}p'</code>). No model checks another model.</li>
+        <li><strong>Main LLM</strong> (Claude) sees only the verified context and answers with real <code>file:line</code> citations.</li>
+      </ol>
+      <p class="how-note">The thing RAG structurally cannot do: prove the retrieved fact is real before answering.</p>
+    </section>
+
+    <section id="proof">
+      <h2>Every claim has a receipt</h2>
+      <p>NEXUS does not ask you to trust a chunk. Each statement in the answer links to a verified <code>file:line</code> that a shell command confirmed exists. Provenance is the product, not an afterthought.</p>
+    </section>
+
+    <section id="cta">
+      <h2>Retrieval is not dead. Unverified retrieval is.</h2>
+      <div class="hero-cta">
+        <a class="btn-primary" href="https://github.com/LlamaopNV/why-rag-is-dead">Browse the NEXUS source</a>
+        <a class="btn-ghost" href="https://github.com/LlamaopNV/why-rag-is-dead#readme">Run it yourself</a>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="./sim.js"></script>
+</body>
+</html>

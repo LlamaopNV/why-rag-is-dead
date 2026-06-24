@@ -1,0 +1,16 @@
+{
+  "query": "Where is binary search implemented and how does it handle an empty array?",
+  "plannerTokens": 500,
+  "tasks": [
+    "grep -rn 'def binary_search' searches/",
+    "sed -n '1,40p' searches/binary_search.py",
+    "grep -n 'len(' searches/binary_search.py"
+  ],
+  "citations": [
+    { "id": "c1", "file": "searches/binary_search.py", "line": 23, "text": "def binary_search(sorted_collection, item):", "claim": "binary_search is defined here" },
+    { "id": "c2", "file": "searches/binary_search.py", "line": 31, "text": "left, right = 0, len(sorted_collection) - 1", "claim": "bounds are derived from len(); empty input gives right = -1" },
+    { "id": "c3", "file": "searches/binary_search.py", "line": 33, "text": "while left <= right:", "claim": "loop never runs when right = -1, so an empty array returns the not-found path" }
+  ],
+  "answer": "Binary search lives in searches/binary_search.py:23. For an empty array, len() makes right = -1 (line 31), so the while left <= right loop on line 33 never executes and the function returns its not-found result. No special-casing needed.",
+  "tokens": { "naive": 50000, "claudeCode": 53000, "nexus": 13000 }
+}
