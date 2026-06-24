@@ -155,6 +155,17 @@ p { max-width: var(--measure); }
 .btn-ghost:hover { background: var(--ink); color: var(--paper); transform: translateY(-2px); }
 .btn-ghost:active { transform: translateY(0); }
 
+/* visible keyboard focus across all interactive elements */
+.btn-primary:focus-visible,
+.btn-ghost:focus-visible,
+.console__run:focus-visible,
+.masthead__nav a:focus-visible,
+.wordmark:focus-visible,
+.site-footer a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
 /* ---------- hero ---------- */
 .hero {
   min-height: calc(100dvh - 62px);
