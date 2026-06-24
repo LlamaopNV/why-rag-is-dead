@@ -31,7 +31,7 @@
   --maxw: 1080px;
   --measure: 60ch;
   --pad-x: clamp(1.25rem, 5vw, 3rem);
-  --section-y: clamp(4.5rem, 9vw, 8.5rem);
+  --section-y: clamp(3.25rem, 6vw, 5.5rem);
 }
 
 * { box-sizing: border-box; }
@@ -204,14 +204,18 @@ p { max-width: var(--measure); }
 .failures { list-style: none; margin: 0; padding: 0; }
 .failures li {
   display: grid;
-  grid-template-columns: 4.5rem 1fr;
-  gap: clamp(1rem, 4vw, 3rem);
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: clamp(1rem, 4vw, 3rem);
+  row-gap: 0.5rem;
   align-items: start;
-  padding: clamp(1.6rem, 3vw, 2.4rem) 0;
+  padding: clamp(1.4rem, 2.4vw, 2rem) 0;
   border-top: 1px solid var(--rule);
 }
 .failures li:last-child { border-bottom: 1px solid var(--rule); }
 .failures__no {
+  grid-column: 1;
+  grid-row: 1 / 3;
   font-family: var(--serif-display);
   font-size: 2.6rem;
   font-weight: 500;
@@ -219,8 +223,8 @@ p { max-width: var(--measure); }
   color: var(--accent);
   line-height: 1;
 }
-.failures h3 { font-size: 1.5rem; margin: 0 0 0.5rem; }
-.failures p { margin: 0; color: var(--ink-2); }
+.failures h3 { grid-column: 2; grid-row: 1; font-size: 1.5rem; margin: 0; }
+.failures p { grid-column: 2; grid-row: 2; margin: 0; max-width: 60ch; color: var(--ink-2); }
 
 /* ---------- simulation / console ---------- */
 .sim__head { margin-bottom: clamp(2rem, 4vw, 3rem); }
