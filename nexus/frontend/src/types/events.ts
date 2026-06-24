@@ -12,6 +12,7 @@ export type EventType =
   | 'manager.verify'
   | 'manager.verify_ok'
   | 'manager.verify_fail'
+  | 'manager.relevance_filter'
   | 'manager.package'
   | 'main_llm.start'
   | 'main_llm.stream'
@@ -19,6 +20,12 @@ export type EventType =
   | 'token.update'
   | 'system.error'
   | 'session.done'
+  | 'benchmark.started'
+  | 'benchmark.progress'
+  | 'benchmark.stream'
+  | 'benchmark.complete'
+  | 'benchmark.timeout'
+  | 'benchmark.error'
 
 export interface NexusEvent {
   type: EventType
@@ -87,3 +94,10 @@ export interface MainLlmStreamData { chunk: string }
 export interface MainLlmDoneData   { response: string; tokens: TokenStats }
 export interface SessionDoneData   { tokens: TokenStats; nexus_total: number; naive_estimate: number; reduction_pct: number }
 export interface SystemErrorData   { error: string; trace?: string }
+
+export interface BenchmarkResult {
+  tokens: number
+  toolCalls: number
+  timeSeconds: number
+  model?: string
+}

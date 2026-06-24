@@ -1,5 +1,3 @@
-// All endpoints match routers/api.py exactly.
-
 const BASE = 'http://localhost:8000'
 
 async function post<T>(path: string, body: unknown): Promise<T> {
@@ -51,15 +49,33 @@ export interface QueryResponse {
   status: string
 }
 
+export interface BenchmarkStatusResponse {
+  available: boolean
+  claude_binary: string | null
+}
+
+export interface RaceResponse {
+  session_id: string
+  status: string
+}
+
 // ── API calls ────────────────────────────────────────────────────────────────
 
 export const api = {
-  health:      ()                                        => get<HealthResponse>('/api/health'),
-  indexStatus: ()                                        => get<IndexStatusResponse>('/api/index/status'),
-  index:       (path: string)                            => post<IndexResponse>('/api/index', { path }),
+  health:          ()                                          => get<HealthResponse>('/api/health'),
+  indexStatus:     ()                                          => get<IndexStatusResponse>('/api/index/status'),
+  index:           (path: string)                              => post<IndexResponse>('/api/index', { path }),
+  benchmarkStatus: ()                                          => get<BenchmarkStatusResponse>('/api/benchmark/status'),
 
-  // POST /api/query — fires pipeline as background task, returns immediately.
-  // All results come through WebSocket /ws/{session_id}.
-  query: (query: string, session_id: string, naive_mode: boolean) =>
+  // NEXUS only
+  query: (query: string, session_id: string, naive_mode = false) =>
     post<QueryResponse>('/api/query', { query, session_id, naive_mode }),
+
+  // NEXUS + Claude Code CLI simultaneously
+  race: (query: string, session_id: string, codebase_path?: string) =>
+    post<RaceResponse>('/api/benchmark/race', { query, session_id, codebase_path }),
+
+  // Manual fallback: enter Claude Code CLI numbers by hand
+  manualBenchmark: (tokens_used: number, tool_calls?: number, time_seconds?: number) =>
+    post('/api/benchmark/manual', { tokens_used, tool_calls, time_seconds }),
 }

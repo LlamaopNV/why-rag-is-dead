@@ -20,3 +20,9 @@ nexus/pgdata/
 # OS
 .DS_Store
 Thumbs.db
+
+# JetBrains
+.idea/
+
+# Superpowers SDD scratch
+.superpowers/

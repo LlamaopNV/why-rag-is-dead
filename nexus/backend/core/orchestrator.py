@@ -70,7 +70,7 @@ class Orchestrator:
             tasks = await self._planner.plan(query, session_id, indexer.get_file_tree())
 
             # ── 2. Manager → verified context ─────────────────────────────────
-            verified = await self._manager.run(tasks, session_id, cb_path)
+            verified = await self._manager.run(tasks, session_id, cb_path, query=query)
 
             # Token snapshot after workers + manager
             await _emit_token_update(session_id)

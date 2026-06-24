@@ -71,5 +71,9 @@ class AnthropicClient:
         }
         if system:
             kwargs["system"] = system
-        response = await self.client.messages.count_tokens(**kwargs)
+        # count_tokens lives on client.beta.messages in some SDK versions
+        try:
+            response = await self.client.messages.count_tokens(**kwargs)
+        except AttributeError:
+            response = await self.client.beta.messages.count_tokens(**kwargs)
         return response.input_tokens

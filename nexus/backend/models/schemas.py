@@ -7,12 +7,25 @@ class QueryRequest(BaseModel):
     query: str
     session_id: Optional[str] = None
     codebase_path: Optional[str] = None
-    naive_mode: bool = True  # always run naive comparison by default
+    naive_mode: bool = True
 
 
 class QueryResponse(BaseModel):
     session_id: str
     status: str = "started"
+
+
+class RaceRequest(BaseModel):
+    query: str
+    session_id: Optional[str] = None
+    codebase_path: Optional[str] = None
+
+
+class BenchmarkInput(BaseModel):
+    """Manual fallback — enter Claude Code CLI numbers directly."""
+    tokens_used: int
+    tool_calls: Optional[int] = None
+    time_seconds: Optional[float] = None
 
 
 class IndexRequest(BaseModel):

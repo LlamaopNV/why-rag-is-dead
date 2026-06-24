@@ -22,6 +22,7 @@ class EventType(str, Enum):
     MANAGER_VERIFY = "manager.verify"
     MANAGER_VERIFY_OK = "manager.verify_ok"
     MANAGER_VERIFY_FAIL = "manager.verify_fail"
+    MANAGER_RELEVANCE_FILTER = "manager.relevance_filter"
     MANAGER_PACKAGE = "manager.package"
 
     # Main LLM
@@ -31,6 +32,14 @@ class EventType(str, Enum):
 
     # Token tracking
     TOKEN_UPDATE = "token.update"
+
+    # Benchmark (Claude Code CLI race)
+    BENCHMARK_STARTED  = "benchmark.started"
+    BENCHMARK_PROGRESS = "benchmark.progress"
+    BENCHMARK_STREAM   = "benchmark.stream"
+    BENCHMARK_COMPLETE = "benchmark.complete"
+    BENCHMARK_TIMEOUT  = "benchmark.timeout"
+    BENCHMARK_ERROR    = "benchmark.error"
 
     # System
     ERROR = "system.error"

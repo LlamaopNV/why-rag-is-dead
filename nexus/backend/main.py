@@ -30,15 +30,24 @@ _log = logging.getLogger("nexus.main")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     from backend.services.shell import BASH, run_shell
+    from backend.services.claude_code_benchmark import benchmark_service
+    from backend.core.event_bus import event_bus
     from pathlib import Path
+
+    # Wire event_bus into benchmark singleton
+    benchmark_service.bus = event_bus
+
     _log.info("NEXUS starting  bash=%s", BASH)
-    # Smoke-test: confirm shell execution works
+    _log.info("Claude Code CLI: %s", benchmark_service.claude_bin or "NOT FOUND")
+
     try:
         out = await run_shell("echo nexus-shell-ok", Path("."), timeout=5.0)
         _log.info("shell smoke-test: %s", out.strip())
     except Exception as e:
         _log.error("shell smoke-test FAILED: %s", e)
+
     yield
+
     from backend.routers.api import _ollama
     await _ollama.close()
     _log.info("NEXUS stopped.")
